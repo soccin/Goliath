@@ -36,9 +36,14 @@ load_argos<-function(odir) {
         group_split(Tumor_Sample_Barcode)
     names(fusions)=map(fusions,\(x){x$Tumor_Sample_Barcode[1]}) %>% unlist
 
-    cnv=read_tsv(file.path(pdir,"data_CNA.txt"),comment="#") %>%
-        gather(Tumor_Sample_Barcode,CNV,-Hugo_Symbol) %>%
-        filter(CNV!=0 & !is.na(CNV)) %>%
+    # cnv=read_tsv(file.path(pdir,"data_CNA.txt"),comment="#") %>%
+    #     gather(Tumor_Sample_Barcode,CNV,-Hugo_Symbol) %>%
+    #     filter(CNV!=0 & !is.na(CNV)) %>%
+    #     group_split(Tumor_Sample_Barcode)
+    # names(cnv)=map(cnv,\(x){x$Tumor_Sample_Barcode[1]}) %>% unlist
+
+    cnv=read_tsv(fs::dir_ls(adir,regex=".gene.cna.txt"),comment="#") %>%
+        mutate(Tumor_Sample_Barcode=gsub("_[^_]*$","",Tumor_Sample_Barcode)) %>%
         group_split(Tumor_Sample_Barcode)
     names(cnv)=map(cnv,\(x){x$Tumor_Sample_Barcode[1]}) %>% unlist
 

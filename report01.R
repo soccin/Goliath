@@ -8,6 +8,8 @@ suppressPackageStartupMessages({
 
 if(interactive() && exists("SOURCED") && SOURCED) halt(".INCLUDE")
 
+geneAnnotation=readRDS("data/geneAnnotation.rds")
+
 args=commandArgs(trailing=T)
 
 aa=load_argos(args[1])
@@ -38,9 +40,23 @@ mafTbl %>% addHtmlTableStyle(align="lllll") %>% htmlTable(rnames=F)
 mafTbl.html=mafTbl %>% addHtmlTableStyle(align="lllll",css.cell="padding-left: 1em;") %>% htmlTable(rnames=F,useViewer=F)
 
 cnvTbl=aa[[samp]]$CNV %>%
-    filter(abs(CNV)>1 & !grepl("^snp|^Tiling2|_Promoter_",Hugo_Symbol)) %>%
-    mutate(Alteration=ifelse(CNV>0,"Amplification","Deletion"),Type="Whole gene") %>%
-    select(Gene=Hugo_Symbol,Type,Alteration)
+    select(Gene=Hugo_Symbol,tcn,FACETS_CALL) %>%
+    filter(tcn>5 | tcn<1) %>%
+    left_join(geneAnnotation,by=c(Gene="hgnc.symbol")) %>%
+    filter(gene_biotype=="protein_coding") %>%
+    mutate(Type="Whole Gene",Alteration=FACETS_CALL) %>%
+    mutate(Location=paste0(chrom,band)) %>%
+    mutate(`Additional Information`=paste0("TCN: ",tcn)) %>%
+    arrange(chrom) %>%
+    select(Gene,Type,Alteration,Location,`Additional Information`)
+
+cnvTbl.html=cnvTbl %>% addHtmlTableStyle(align="lllll",css.cell="padding-left: 1em;") %>% htmlTable(rnames=F,useViewer=F)
+
+
+# cnvTbl=aa[[samp]]$CNV %>%
+#     filter(abs(CNV)>1 & !grepl("^snp|^Tiling2|_Promoter_",Hugo_Symbol)) %>%
+#     mutate(Alteration=ifelse(CNV>0,"Amplification","Deletion"),Type="Whole gene") %>%
+#     select(Gene=Hugo_Symbol,Type,Alteration)
 
 SOURCED=T
 
