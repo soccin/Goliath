@@ -11,12 +11,14 @@ if(interactive() && exists("SOURCED") && SOURCED) halt(".INCLUDE")
 args=commandArgs(trailing=T)
 
 aa=load_argos(args[1])
-samp="s_C_VXXWFY_G007_d06"
+samp=names(aa)[1]
 
 tbl01=read_csv("data/section01.csv")
 
 tbl01$Value1=aa[[samp]][tbl01$Value1] %>% unlist
 tbl01$Value2=aa[[samp]][tbl01$Value2] %>% unlist
+
+tbl01$Value2['SAMPLE_ID']=gsub("s_","",tbl01$Value2['SAMPLE_ID']) %>% gsub("_","-",.)
 
 css.cell=c("padding-left: .25em","padding-left: 1em; padding-right: 6em;","padding-left: .25em;","padding-left: 1em;")
 tbl01 %>% addHtmlTableStyle(align = "llll",col.rgroup=c("#FBEEC7","#FFFFFF"),css.cell=css.cell) %>%
