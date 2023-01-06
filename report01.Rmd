@@ -1,0 +1,44 @@
+---
+title: "Report01"
+output:
+    html_document:
+        theme: united
+        keep_md: true
+---
+
+
+```{r loadData, echo=FALSE, include=FALSE}
+source("load_data.R", local=knitr::knit_global())
+```
+
+## Data Clinical
+```{r echo=F}
+css.cell=c(
+    "padding-left: .25em",
+    "padding-left: 1em; padding-right: 6em;",
+    "padding-left: .25em;",
+    "padding-left: 1em;")
+tbl01 %>%
+    addHtmlTableStyle(align = "llll",col.rgroup=c("#FBEEC7","#FFFFFF"),css.cell=css.cell) %>%
+     htmlTable(rnames=F,cnames=F,header=rep("",4))
+```
+
+## Somatic alterations detected in this sample:
+
+### Mutations
+```{r echo=F}
+mafTbl %>%
+    addHtmlTableStyle(align="lllll",col.rgroup=c("#DBDEFF","#FFFFFF"),css.cell="padding-left: 1em;") %>%
+    htmlTable(rnames=F)
+```
+
+### Copy Number
+```{r echo=F}
+cnvTbl %>%
+    addHtmlTableStyle(align="lllll",col.rgroup=c("#DEFFDB","#FFFFFF"),css.cell="padding-left: 1em;") %>%
+    htmlTable(rnames=F)
+```
+
+## QC
+
+
