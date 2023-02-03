@@ -1,3 +1,10 @@
+suppressPackageStartupMessages({
+    library(readr)
+    library(dplyr)
+    library(purrr)
+    library(jsonlite)
+})
+
 tibble_to_named_list<-function(tbl,col) {
     nl=transpose(tbl)
     names(nl)=map(nl,col) %>% unlist
@@ -19,9 +26,28 @@ load_argos<-function(odir) {
 
     dpt=read_tsv(file.path(pdir,"data_clinical_patient.txt"),comment="#")
 
-    sampleData=read_tsv(file.path(pdir,"data_clinical_sample.txt"),comment="#") %>%
+    sampleTbl=read_tsv(file.path(pdir,"data_clinical_sample.txt"),comment="#") %>%
         left_join(dpt,by="PATIENT_ID")
-    sampleData=tibble_to_named_list(sampleData,"SAMPLE_ID")
+
+    #
+    # Get normal ID and add Matched status
+    #
+
+    inputJsonFile=fs::dir_ls(file.path(odir,"json"),recur=T,regex="argos_qc.*input\\.json$")
+    inputJson=read_json(inputJsonFile)
+
+    pairingTable=tibble(
+            SAMPLE_ID=unlist(inputJson$tumor_sample_names),
+            NORMAL_ID=unlist(inputJson$normal_sample_names)
+        ) %>%
+        mutate(NORMAL_ID=gsub("_","-",NORMAL_ID) %>% gsub("^s-","",.))
+
+    sampleTbl=left_join(sampleTbl,pairingTable) %>%
+        rowwise %>%
+        mutate(MATCHED=ifelse(grepl(PATIENT_ID,NORMAL_ID),"Matched","UnMatched")) %>%
+        ungroup
+
+    sampleData=tibble_to_named_list(sampleTbl,"SAMPLE_ID")
 
     # maf=read_tsv(file.path(pdir,"data_mutations_extended.txt"),comment="#") %>%
     #     group_split(Tumor_Sample_Barcode)
