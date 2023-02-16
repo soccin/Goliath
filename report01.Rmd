@@ -23,6 +23,11 @@ tbl01 %>%
      htmlTable(rnames=F,cnames=F,header=rep("",4))
 ```
 
+## Summary
+```{r echo=F}
+summaryTbl %>% addHtmlTableStyle(align="ll",col.rgroup=c("#FFFFFF","#EBEBEB")) %>% htmlTable(rnames=F,cnames=F,header=rep("",2))
+```
+
 ## Somatic alterations:
 
 ### Mutations
@@ -32,7 +37,7 @@ mafTbl %>%
     htmlTable(rnames=F)
 ```
 
-### Copy Number
+### Copy Number - HC Events
 ```{r echo=F}
 cnvTbl %>%
     addHtmlTableStyle(align="lllll",col.rgroup=c("#DEFFDB","#FFFFFF"),css.cell="padding-left: 1em;") %>%
@@ -41,4 +46,7 @@ cnvTbl %>%
 
 ## QC
 
-
+## Copy Number - All Events
+```{r echo=F}
+cnvTblFull
+```
