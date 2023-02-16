@@ -5,6 +5,8 @@ suppressPackageStartupMessages({
     library(jsonlite)
 })
 
+source("create_tables.R")
+
 load_gene_annotations <- function() {
     readRDS("data/geneAnnotation.rds")
 }

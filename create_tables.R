@@ -1,3 +1,9 @@
+suppressPackageStartupMessages({
+    library(tidyverse)
+    library(htmlTable)
+    library(kableExtra)
+})
+
 get_clinical_table <- function(argosDb,sid) {
 
     clinTbl=read_csv("data/section01.csv")

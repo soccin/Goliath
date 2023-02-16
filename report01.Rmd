@@ -23,7 +23,7 @@ tbl01 %>%
      htmlTable(rnames=F,cnames=F,header=rep("",4))
 ```
 
-## Somatic alterations detected in this sample:
+## Somatic alterations:
 
 ### Mutations
 ```{r echo=F}
