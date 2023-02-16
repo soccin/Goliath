@@ -5,6 +5,10 @@ suppressPackageStartupMessages({
     library(jsonlite)
 })
 
+load_gene_annotations <- function() {
+    readRDS("data/geneAnnotation.rds")
+}
+
 tibble_to_named_list<-function(tbl,col) {
     nl=transpose(tbl)
     names(nl)=map(nl,col) %>% unlist
