@@ -15,6 +15,16 @@ get_clinical_table <- function(argosDb,sid) {
 
 }
 
+get_summary_table <- function(argosDb,sid) {
+    tribble(
+        ~Section, ~Data,
+        "Summary:", stringi::stri_rand_lipsum(1),
+        "MSI Status:", stringi::stri_rand_lipsum(1),
+        "Tumor Mutations Burden:", stringi::stri_rand_lipsum(1),
+        "Comments:", stringi::stri_rand_lipsum(1)
+    )
+}
+
 get_maf_table <- function(argosDb,sid) {
     argosDb[[sid]]$MAF %>%
         filter(!grepl("=$",HGVSp_Short)) %>%
@@ -27,9 +37,23 @@ get_maf_table <- function(argosDb,sid) {
 }
 
 get_cnv_table <- function(argosDb,sid) {
+    geneAnnotation=load_gene_annotations()
     argosDb[[sid]]$CNV %>%
         select(Gene=Hugo_Symbol,tcn,FACETS_CALL) %>%
         filter(tcn>5 | tcn<1) %>%
+        left_join(geneAnnotation,by=c(Gene="hgnc.symbol")) %>%
+        filter(gene_biotype=="protein_coding") %>%
+        mutate(Type="Whole Gene",Alteration=FACETS_CALL) %>%
+        mutate(Location=paste0(chrom,band)) %>%
+        mutate(`Additional Information`=paste0("TCN: ",tcn)) %>%
+        arrange(chrom) %>%
+        select(Gene,Type,Alteration,Location,`Additional Information`)
+}
+
+get_cnv_table_full <- function(argosDb,sid) {
+    geneAnnotation=load_gene_annotations()
+    argosDb[[sid]]$CNV %>%
+        select(Gene=Hugo_Symbol,tcn,FACETS_CALL) %>%
         left_join(geneAnnotation,by=c(Gene="hgnc.symbol")) %>%
         filter(gene_biotype=="protein_coding") %>%
         mutate(Type="Whole Gene",Alteration=FACETS_CALL) %>%
