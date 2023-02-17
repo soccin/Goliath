@@ -39,7 +39,10 @@ load_argos<-function(odir) {
     # Get normal ID and add Matched status
     #
 
-    inputJsonFile=fs::dir_ls(file.path(odir,"json"),recur=T,regex="argos_qc.*input\\.json$")
+    qc_dir <- list.files(paste(odir,"json",sep="/"), pattern = "argos_qc.*",full.names = TRUE)
+    json_files <- list.files(qc_dir, pattern = "input\\.json$",recursive = TRUE, full.names = TRUE)
+    inputJsonFile <- json_files[which.max(file.info(json_files)$mtime)] ##most_recent_file
+    
     inputJson=read_json(inputJsonFile)
 
     pairingTable=tibble(
