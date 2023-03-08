@@ -15,16 +15,6 @@ get_clinical_table <- function(argosDb,sid) {
 
 }
 
-get_summary_table <- function(argosDb,sid) {
-    tribble(
-        ~Section, ~Data,
-        "Summary:", stringi::stri_rand_lipsum(1),
-        "MSI Status:", stringi::stri_rand_lipsum(1),
-        "Tumor Mutations Burden:", stringi::stri_rand_lipsum(1),
-        "Comments:", stringi::stri_rand_lipsum(1)
-    )
-}
-
 get_maf_table <- function(argosDb,sid) {
     argosDb[[sid]]$MAF %>%
         filter(!grepl("=$",HGVSp_Short)) %>%
@@ -61,4 +51,12 @@ get_cnv_table_full <- function(argosDb,sid) {
         mutate(`Additional Information`=paste0("TCN: ",tcn)) %>%
         arrange(chrom) %>%
         select(Gene,Type,Alteration,Location,`Additional Information`)
+}
+
+get_fusion_table <- function(argosDb,sid) {
+    argosDb[[sid]]$Fusions %>%
+        mutate(`Additional Information`=paste0("Frame: ",Frame,"; Support: DNA=",DNA_support,",RNA=",RNA_support)) %>%
+        separate(Fusion,c("Alteration","Type"),sep=" ") %>%
+        mutate(Location="") %>%
+        select(Gene=Hugo_Symbol,Type,Alteration,Location,`Additional Information`)
 }

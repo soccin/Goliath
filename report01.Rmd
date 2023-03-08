@@ -48,6 +48,12 @@ data$cnvTbl %>%
     htmlTable(rnames=F)
 ```
 
+### Fusions
+```{r echo=F}
+data$fusionTbl %>%
+    addHtmlTableStyle(align="lllll",col.rgroup=c("#DEFFDB","#FFFFFF"),css.cell="padding-left: 1em;") %>%
+    htmlTable(rnames=F)
+```
 ## QC
 
 ## Copy Number - All Events
