@@ -2,10 +2,9 @@ source("load_argos.R")
 
 #################################################################
 
-load_data<-function(argos_dir) {
+load_data<-function(argos_dir,sampleID) {
 
     argos_data=load_argos(argos_dir)
-    sampleID=names(argos_data)[1]
 
     summaryTbl=get_summary_table(argos_data,sampleID)
 

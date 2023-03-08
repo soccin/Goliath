@@ -6,12 +6,13 @@ output:
         keep_md: true
     params:
         argosDir: ARGOS_DIR
+        sampleID: SAMPLE_ID
 ---
 
 
 ```{r loadData, echo=FALSE, include=FALSE}
 source("load_data.R", local=knitr::knit_global())
-data=load_data(params$argosDir)
+data=load_data(params$argosDir,params$sampleID)
 ```
 
 ## Data Clinical
