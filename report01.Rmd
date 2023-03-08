@@ -4,11 +4,14 @@ output:
     html_document:
         theme: united
         keep_md: true
+    params:
+        argosDir: ARGOS_DIR
 ---
 
 
 ```{r loadData, echo=FALSE, include=FALSE}
 source("load_data.R", local=knitr::knit_global())
+data=load_data(params$argosDir)
 ```
 
 ## Data Clinical
@@ -18,28 +21,28 @@ css.cell=c(
     "padding-left: 1em; padding-right: 6em;",
     "padding-left: .25em;",
     "padding-left: 1em;")
-tbl01 %>%
+data$tbl01 %>%
     addHtmlTableStyle(align = "llll",col.rgroup=c("#FBEEC7","#FFFFFF"),css.cell=css.cell) %>%
      htmlTable(rnames=F,cnames=F,header=rep("",4))
 ```
 
 ## Summary
 ```{r echo=F}
-summaryTbl %>% addHtmlTableStyle(align="ll",col.rgroup=c("#FFFFFF","#EBEBEB")) %>% htmlTable(rnames=F,cnames=F,header=rep("",2))
+data$summaryTbl %>% addHtmlTableStyle(align="ll",col.rgroup=c("#FFFFFF","#EBEBEB")) %>% htmlTable(rnames=F,cnames=F,header=rep("",2))
 ```
 
 ## Somatic alterations:
 
 ### Mutations
 ```{r echo=F}
-mafTbl %>%
+data$mafTbl %>%
     addHtmlTableStyle(align="lllll",col.rgroup=c("#DBDEFF","#FFFFFF"),css.cell="padding-left: 1em;") %>%
     htmlTable(rnames=F)
 ```
 
 ### Copy Number - HC Events
 ```{r echo=F}
-cnvTbl %>%
+data$cnvTbl %>%
     addHtmlTableStyle(align="lllll",col.rgroup=c("#DEFFDB","#FFFFFF"),css.cell="padding-left: 1em;") %>%
     htmlTable(rnames=F)
 ```
@@ -48,5 +51,5 @@ cnvTbl %>%
 
 ## Copy Number - All Events
 ```{r echo=F}
-cnvTblFull
+data$cnvTblFull
 ```
