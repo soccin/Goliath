@@ -11,7 +11,6 @@ load_data<-function(argos_dir,sampleID) {
 
     argos_data=load_argos(argos_dir)
 
-
     isUnMatched=argos_data[[sampleID]]$MATCH == "UnMatched"
 
     tbl01=get_clinical_table(argos_data,sampleID)
@@ -46,7 +45,7 @@ load_data<-function(argos_dir,sampleID) {
         summaryTbl=tribble(
             ~Section, ~Data,
             "Summary:", summaryTxt,
-            "Additional Filtering:", "This sample was run un-matched (against a pooled normal) so the ExAC Germline Filter was applied"
+            "Comments:", "This sample was run un-matched (against a pooled normal) so the ExAC Germline Filter was applied"
         )
 
     }
