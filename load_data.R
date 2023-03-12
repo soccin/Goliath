@@ -3,6 +3,10 @@ require(glue)
 
 #################################################################
 
+number_of_events <- function(table) {
+    table %>% filter(Gene!="") %>% nrow
+}
+
 load_data<-function(argos_dir,sampleID) {
 
     argos_data=load_argos(argos_dir)
@@ -17,9 +21,9 @@ load_data<-function(argos_dir,sampleID) {
 
     fusionTbl=get_fusion_table(argos_data,sampleID)
 
-    nMut=nrow(mafTbl)
-    nCNV=nrow(cnvTblFull)
-    nFusion=nrow(fusionTbl)
+    nMut=number_of_events(mafTbl)
+    nCNV=number_of_events(cnvTblFull)
+    nFusion=number_of_events(fusionTbl)
 
     summaryTxt=glue("{nMut} mutations, {nCNV} copy number alterations, {nFusion} structural variant dectected")
     msiTxt=glue("MSI Status = {MSI_STATUS}, score = {MSI_SCORE}",.envir=argos_data[[sampleID]])
