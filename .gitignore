@@ -7,3 +7,4 @@ examples/
 *.html
 *.pdf
 *.md
+.Rprofile
