@@ -25,6 +25,7 @@ for(si in unique(names(argos))) {
         params=params,
         output_format="html_document",
         output_file=paste0("rpt_",projectNo,"-",params$sampleID,"__",VERSION,".html"),
+        intermediates_dir=tempdir(),
         clean=T
     )
 
