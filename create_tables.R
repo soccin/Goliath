@@ -40,19 +40,27 @@ get_maf_table <- function(argosDb,sid) {
 get_cnv_table <- function(argosDb,sid) {
     geneAnnotation=load_gene_annotations()
     if(!is.null(argosDb[[sid]]$CNV)) {
-        argosDb[[sid]]$CNV %>%
-            select(Gene=Hugo_Symbol,tcn,FACETS_CALL) %>%
-            filter(tcn>5 | tcn<1) %>%
-            left_join(geneAnnotation,by=c(Gene="hgnc.symbol")) %>%
-            filter(gene_biotype=="protein_coding") %>%
-            mutate(Type="Whole Gene",Alteration=FACETS_CALL) %>%
-            mutate(Location=paste0(chrom,band)) %>%
-            mutate(`Additional Information`=paste0("TCN: ",tcn)) %>%
-            arrange(chrom) %>%
-            select(Gene,Type,Alteration,Location,`Additional Information`)
+        tbl=argosDb[[sid]]$CNV %>%
+                select(Gene=Hugo_Symbol,tcn,FACETS_CALL) %>%
+                filter(tcn>5 | tcn<1) %>%
+                left_join(geneAnnotation,by=c(Gene="hgnc.symbol")) %>%
+                filter(gene_biotype=="protein_coding") %>%
+                mutate(Type="Whole Gene",Alteration=FACETS_CALL) %>%
+                mutate(Location=paste0(chrom,band)) %>%
+                mutate(`Additional Information`=paste0("TCN: ",tcn)) %>%
+                arrange(chrom) %>%
+                select(Gene,Type,Alteration,Location,`Additional Information`)
+
+        if(nrow(tbl)>0) {
+            tbl
+        } else {
+            get_null_table("No AMP or HOMODEL events")
+        }
+
     } else {
         get_null_table("No AMP or HOMODEL events")
     }
+
 }
 
 get_cnv_table_full <- function(argosDb,sid) {
