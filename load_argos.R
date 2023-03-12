@@ -1,3 +1,4 @@
+
 suppressPackageStartupMessages({
     library(readr)
     library(dplyr)
@@ -32,24 +33,17 @@ load_argos<-function(odir) {
 
     dpt=read_tsv(file.path(pdir,"data_clinical_patient.txt"),comment="#")
 
+    maf=read_tsv(fs::dir_ls(adir,regex=".muts.maf$"),comment="#")
+
+    pairingTable=maf %>%
+        distinct(SAMPLE_ID=Tumor_Sample_Barcode,NORMAL_ID=Matched_Norm_Sample_Barcode) %>%
+        mutate(NORMAL_ID=gsub("_","-",NORMAL_ID) %>% gsub("^s-","",.))
+
+    maf=maf %>% group_split(Tumor_Sample_Barcode)
+    names(maf)=map(maf,\(x){x$Tumor_Sample_Barcode[1]}) %>% unlist
+
     sampleTbl=read_tsv(file.path(pdir,"data_clinical_sample.txt"),comment="#") %>%
         left_join(dpt,by="PATIENT_ID")
-
-    #
-    # Get normal ID and add Matched status
-    #
-
-    qc_dir <- list.files(paste(odir,"json",sep="/"), pattern = "argos_qc.*",full.names = TRUE)
-    json_files <- list.files(qc_dir, pattern = "input\\.json$",recursive = TRUE, full.names = TRUE)
-    inputJsonFile <- json_files[which.max(file.info(json_files)$mtime)] ##most_recent_file
-    
-    inputJson=read_json(inputJsonFile)
-
-    pairingTable=tibble(
-            SAMPLE_ID=unlist(inputJson$tumor_sample_names),
-            NORMAL_ID=unlist(inputJson$normal_sample_names)
-        ) %>%
-        mutate(NORMAL_ID=gsub("_","-",NORMAL_ID) %>% gsub("^s-","",.))
 
     sampleTbl=left_join(sampleTbl,pairingTable) %>%
         rowwise %>%
@@ -58,24 +52,9 @@ load_argos<-function(odir) {
 
     sampleData=tibble_to_named_list(sampleTbl,"SAMPLE_ID")
 
-    # maf=read_tsv(file.path(pdir,"data_mutations_extended.txt"),comment="#") %>%
-    #     group_split(Tumor_Sample_Barcode)
-    # names(maf)=map(maf,\(x){x$Tumor_Sample_Barcode[1]}) %>% unlist
-    # pmaf=maf
-
-    maf=read_tsv(fs::dir_ls(adir,regex=".muts.maf$"),comment="#") %>%
-        group_split(Tumor_Sample_Barcode)
-    names(maf)=map(maf,\(x){x$Tumor_Sample_Barcode[1]}) %>% unlist
-
     fusions=read_tsv(file.path(pdir,"data_fusions.txt"),comment="#") %>%
         group_split(Tumor_Sample_Barcode)
     names(fusions)=map(fusions,\(x){x$Tumor_Sample_Barcode[1]}) %>% unlist
-
-    # cnv=read_tsv(file.path(pdir,"data_CNA.txt"),comment="#") %>%
-    #     gather(Tumor_Sample_Barcode,CNV,-Hugo_Symbol) %>%
-    #     filter(CNV!=0 & !is.na(CNV)) %>%
-    #     group_split(Tumor_Sample_Barcode)
-    # names(cnv)=map(cnv,\(x){x$Tumor_Sample_Barcode[1]}) %>% unlist
 
     cnv=read_tsv(fs::dir_ls(adir,regex=".gene.cna.txt"),comment="#") %>%
         mutate(Tumor_Sample_Barcode=gsub("_[^_]*$","",Tumor_Sample_Barcode)) %>%
