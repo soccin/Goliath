@@ -26,6 +26,10 @@ get_clinical_table <- function(argosDb,sid) {
 
 get_maf_table <- function(argosDb,sid,unmatched) {
 
+    if(is.null(argosDb[[sid]]$MAF)) {
+        return(get_null_table("No mutations"))
+    }
+
     if(!unmatched) {
         maf=argosDb[[sid]]$MAF
     } else {
@@ -82,6 +86,7 @@ get_cnv_table_full <- function(argosDb,sid) {
     if(!is.null(argosDb[[sid]]$CNV)) {
         argosDb[[sid]]$CNV %>%
             select(Gene=Hugo_Symbol,tcn,FACETS_CALL) %>%
+            filter(tcn!=2) %>%
             left_join(geneAnnotation,by=c(Gene="hgnc.symbol")) %>%
             filter(gene_biotype=="protein_coding") %>%
             mutate(Type="Whole Gene",Alteration=FACETS_CALL) %>%
