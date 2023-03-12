@@ -1,5 +1,5 @@
 args=commandArgs(trailing=T)
-if(len(args)!=3) {
+if(length(args)!=3) {
     cat("\n   usage: genReport.R REPORT.Rmd argosFolder sampleID\n\n")
     quit()
 }
