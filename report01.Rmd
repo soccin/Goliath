@@ -1,12 +1,12 @@
 ---
 title: "Report01"
 output:
-    html_document:
-        theme: united
-        keep_md: true
-    params:
-        argosDir: ARGOS_DIR
-        sampleID: SAMPLE_ID
+    prettydoc::html_pretty:
+        theme: architect
+        mathjax: null
+        css: "style.css"
+keep_md: true
+self_contained: true
 ---
 
 
@@ -55,8 +55,10 @@ data$fusionTbl %>%
     htmlTable(rnames=F)
 ```
 ## QC
+_Insert QC report here_
 
-## Copy Number - All Events
+<!-- ## Copy Number - All Events
 ```{r echo=F}
 data$cnvTblFull
 ```
+ -->
