@@ -11,9 +11,12 @@ load_data<-function(argos_dir,sampleID) {
 
     argos_data=load_argos(argos_dir)
 
+
+    isUnMatched=argos_data[[sampleID]]$MATCH == "UnMatched"
+
     tbl01=get_clinical_table(argos_data,sampleID)
 
-    mafTbl=get_maf_table(argos_data,sampleID)
+    mafTbl=get_maf_table(argos_data,sampleID,isUnMatched)
 
     cnvTbl=get_cnv_table(argos_data,sampleID)
 
@@ -26,18 +29,26 @@ load_data<-function(argos_dir,sampleID) {
     nFusion=number_of_events(fusionTbl)
 
     summaryTxt=glue("{nMut} mutations, {nCNV} copy number alterations, {nFusion} structural variant dectected")
-    msiTxt=glue("MSI Status = {MSI_STATUS}, score = {MSI_SCORE}",.envir=argos_data[[sampleID]])
-    tmbTxt=glue("The estimated tumor mutation burden (TMB) for this sample is {CMO_TMB_SCORE} mutations per megabase (mt/Mb).",.envir=argos_data[[sampleID]])
 
-    summaryTbl=tribble(
-        ~Section, ~Data,
-        "Summary:", summaryTxt,
-        "MSI Status:", msiTxt,
-        "Tumor Mutations Burden:", tmbTxt
-    )
+    if(!isUnMatched) {
 
-    if(argos_data[[sampleID]]$MATCH=="UnMatched") {
-        summaryTbl=summaryTbl[-c(2,3),]
+        msiTxt=glue("MSI Status = {MSI_STATUS}, score = {MSI_SCORE}",.envir=argos_data[[sampleID]])
+        tmbTxt=glue("The estimated tumor mutation burden (TMB) for this sample is {CMO_TMB_SCORE} mutations per megabase (mt/Mb).",.envir=argos_data[[sampleID]])
+        summaryTbl=tribble(
+            ~Section, ~Data,
+            "Summary:", summaryTxt,
+            "MSI Status:", msiTxt,
+            "Tumor Mutations Burden:", tmbTxt
+        )
+
+    } else {
+
+        summaryTbl=tribble(
+            ~Section, ~Data,
+            "Summary:", summaryTxt,
+            "Additional Filtering:", "This sample was run un-matched (against a pooled normal) so the ExAC Germline Filter was applied"
+        )
+
     }
 
     list(

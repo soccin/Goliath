@@ -4,6 +4,8 @@ suppressPackageStartupMessages({
     library(kableExtra)
 })
 
+source("filter_exac.R")
+
 get_null_table <- function(msg) {
     tribble(
         ~Gene,~Type,~Alteration,~Location,~`Additional Information`,
@@ -22,9 +24,17 @@ get_clinical_table <- function(argosDb,sid) {
 
 }
 
-get_maf_table <- function(argosDb,sid) {
-    if(!is.null(argosDb[[sid]]$MAF)) {
-        argosDb[[sid]]$MAF %>%
+get_maf_table <- function(argosDb,sid,unmatched) {
+
+    if(!unmatched) {
+        maf=argosDb[[sid]]$MAF
+    } else {
+        maf=filter_exac(argosDb[[sid]]$MAF)
+    }
+
+    if(!is.null(maf)) {
+
+        maf %>%
             filter(!grepl("=$",HGVSp_Short)) %>%
             mutate(`Additional Information`=paste0("MAF: ",round(100*t_var_freq,1),"%")) %>%
             mutate(Alteration=gsub("^p.","",HGVSp_Short)) %>%
@@ -32,9 +42,13 @@ get_maf_table <- function(argosDb,sid) {
             mutate(Location=paste("exon",gsub("/.*","",EXON))) %>%
             select(Gene=Hugo_Symbol,Type=Variant_Classification,Alteration,Location,`Additional Information`) %>%
             mutate_all(~replace(.,grepl("^NA|NA$",.) | is.na(.),""))
+
     } else {
+
         get_null_table("No mutations")
+
     }
+
 }
 
 get_cnv_table <- function(argosDb,sid) {
