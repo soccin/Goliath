@@ -36,6 +36,10 @@ load_data<-function(argos_dir,sampleID) {
         "Tumor Mutations Burden:", tmbTxt
     )
 
+    if(argos_data[[sampleID]]$MATCH=="UnMatched") {
+        summaryTbl=summaryTbl[-c(2,3),]
+    }
+
     list(
         summaryTbl=summaryTbl,
         tbl01=tbl01,
