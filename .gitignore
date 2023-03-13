@@ -6,5 +6,4 @@ _Rhist*
 examples/
 *.html
 *.pdf
-*.md
 .Rprofile
