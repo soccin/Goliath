@@ -7,3 +7,5 @@ examples/
 *.html
 *.pdf
 .Rprofile
+LSF/
+rpt_/
