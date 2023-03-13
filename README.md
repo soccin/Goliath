@@ -13,7 +13,15 @@ source("load_data.R")
 data=load_data(argosDir,sampleID)
 ```
 
-`argosDir` is the path to an Argos output folder and `sampleID` is one of the samples from that run.
+`argosDir` is the path to an Argos output folder and `sampleID` is one of the samples from that run. The return values is a list with the following elements:
+
+- `tbl01` - Sample metadata (id's, type, matched normal, ...)
+- `summaryTbl` - Summary of alterations
+- `mafTbl` - Mutation Table. Will be filtered with `ExAC`-filter if unmatched
+- `cnvTbl` - Filtered Copy Number Table, DMP convention of only HOMODEL & AMP
+- `cnvTblFull` - Full Copy Number Table
+- `fusionTbl` - Fusion Events
+- `reportTbl` - Report info (version, input directory)
 
 
 
