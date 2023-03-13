@@ -50,13 +50,24 @@ load_data<-function(argos_dir,sampleID) {
 
     }
 
+    runFolder=gsub(".*argos","",argos_dir) %>% gsub("/$","",.)
+
+    reportTbl=tribble(
+        ~key,~value,
+        "Report:","Argos Report (version 0.9.5)",
+        "Run Folder:", runFolder,
+        "Data UUID:", digest::digest(argos_data[[sampleID]])
+        )
+
+
     list(
         summaryTbl=summaryTbl,
         tbl01=tbl01,
         mafTbl=mafTbl,
         cnvTbl=cnvTbl,
         cnvTblFull=cnvTblFull,
-        fusionTbl=fusionTbl
+        fusionTbl=fusionTbl,
+        reportTbl=reportTbl
     )
 
 }
