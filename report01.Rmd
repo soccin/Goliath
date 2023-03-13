@@ -54,6 +54,7 @@ data$fusionTbl %>%
     addHtmlTableStyle(align="lllll",col.rgroup=c("#DEFFDB","#FFFFFF"),css.cell="padding-left: 1em;") %>%
     htmlTable(rnames=F)
 ```
+
 ## QC
 _Insert QC report here_
 
@@ -62,3 +63,8 @@ _Insert QC report here_
 data$cnvTblFull
 ```
  -->
+
+## Report Info
+```{r echo=F}
+data$reportTbl %>% addHtmlTableStyle(align="ll",col.rgroup=c("#FFFFFF","#EBEBEB")) %>% htmlTable(rnames=F,cnames=F,header=rep("",2))
+```
