@@ -1,4 +1,3 @@
-
 suppressPackageStartupMessages({
     library(readr)
     library(dplyr)
@@ -24,6 +23,19 @@ get_with_default<-function(ll,key) {
     } else {
         return(NULL)
     }
+}
+
+get_sample_list<-function(odir) {
+
+    read_tsv(
+            file.path(pdir,"data_clinical_sample.txt"),
+            comment="#",
+            col_types = cols(.default = "c"),
+            progress=F
+            ) %>%
+        distinct(SAMPLE_ID) %>%
+        pull(SAMPLE_ID)
+
 }
 
 load_argos<-function(odir) {
