@@ -55,14 +55,13 @@ data$fusionTbl %>%
     htmlTable(rnames=F)
 ```
 
-<!--## QC
+## QC
 _Insert QC report here_
 
 ## Copy Number - All Events
 ```{r echo=F}
 data$cnvTblFull
 ```
- -->
 
 ## Report Info
 ```{r echo=F}
