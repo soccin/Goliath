@@ -48,15 +48,14 @@ get_maf_tables <- function(argosDb,sid,unmatched) {
 
     nullResult=list(
                 mafTbl=get_null_table("No filtered mutations"),
-                mafTblFull=get_null_tabl("No mutations (unfiltered)")
+                mafTblFull=get_null_table("No mutations (unfiltered)")
                 )
 
     if(is.null(argosDb[[sid]]$MAF)) {
         return(nullResult)
     }
 
-    #mafFull=argosDb[[sid]]$MAF %>% filter(!grepl("=$",HGVSp_Short))
-    mafFull=argosDb[[sid]]$MAF %>% filter(grepl("=$",HGVSp_Short))
+    mafFull=argosDb[[sid]]$MAF %>% filter(!grepl("=$",HGVSp_Short))
 
     if(nrow(mafFull)==0){
         return(nullResult)
