@@ -1,6 +1,6 @@
 # Argos-Report
 
-## Version 0.9.6
+## Version 0.9.7
 
 Scripts to load data from Argos output folders and process into tables to facilitate the creation of RMarkdown reports.
 
