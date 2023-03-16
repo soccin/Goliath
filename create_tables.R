@@ -15,7 +15,18 @@ get_null_table <- function(msg) {
 
 get_clinical_table <- function(argosDb,sid) {
 
-    clinTbl=read_csv("data/section01.csv")
+    clinTbl=tribble(
+
+        ~Key1,~Value1,~Key2,~Value2,
+        "Project ID  ","REQUEST_ID","StudyID  ","PROJECT_PI",
+        "Sample ID  ","COLLAB_ID","CMO ID  ","SAMPLE_ID",
+        "Patient ID  ","PATIENT_ID","Sex  ","SEX",
+        "Tumor Type  ","ONCOTREE_CODE","Sample Type  ","SAMPLE_TYPE",
+        "Pair Status  ","MATCHED","NormalID  ","NORMAL_ID",
+
+
+    )
+
     clinTbl$Value1=argosDb[[sid]][clinTbl$Value1] %>% unlist
     clinTbl$Value2=argosDb[[sid]][clinTbl$Value2] %>% unlist
     clinTbl$Value2['SAMPLE_ID']=gsub("s_","",clinTbl$Value2['SAMPLE_ID']) %>% gsub("_","-",.)
