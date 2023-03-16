@@ -35,32 +35,53 @@ get_clinical_table <- function(argosDb,sid) {
 
 }
 
-get_maf_table <- function(argosDb,sid,unmatched) {
+format_maf_table <- function(mm) {
+    mm %>%
+        mutate(`Additional Information`=paste0("MAF: ",round(100*t_var_freq,1),"%")) %>%
+        mutate(Alteration=gsub("^p.","",HGVSp_Short)) %>%
+        mutate(Alteration=paste0(Alteration," (",HGVSc,")")) %>%
+        mutate(Location=paste("exon",gsub("/.*","",EXON))) %>%
+        select(Gene=Hugo_Symbol,Type=Variant_Classification,Alteration,Location,`Additional Information`) %>%
+        mutate_all(~replace(.,grepl("^NA|NA$",.) | is.na(.),""))
+}
+
+get_maf_tables <- function(argosDb,sid,unmatched) {
+
+    nullResult=list(
+                mafTbl=get_null_table("No filtered mutations"),
+                mafTblFull=get_null_tabl("No mutations (unfiltered)")
+                )
 
     if(is.null(argosDb[[sid]]$MAF)) {
-        return(get_null_table("No mutations"))
+        return(nullResult)
+    }
+
+    #mafFull=argosDb[[sid]]$MAF %>% filter(!grepl("=$",HGVSp_Short))
+    mafFull=argosDb[[sid]]$MAF %>% filter(grepl("=$",HGVSp_Short))
+
+    if(nrow(mafFull)==0){
+        return(nullResult)
     }
 
     if(!unmatched) {
-        maf=argosDb[[sid]]$MAF
+        maf=mafFull
     } else {
-        maf=filter_exac(argosDb[[sid]]$MAF)
+        maf=filter_exac(mafFull)
     }
 
     if(!is.null(maf)) {
 
-        maf %>%
-            filter(!grepl("=$",HGVSp_Short)) %>%
-            mutate(`Additional Information`=paste0("MAF: ",round(100*t_var_freq,1),"%")) %>%
-            mutate(Alteration=gsub("^p.","",HGVSp_Short)) %>%
-            mutate(Alteration=paste0(Alteration," (",HGVSc,")")) %>%
-            mutate(Location=paste("exon",gsub("/.*","",EXON))) %>%
-            select(Gene=Hugo_Symbol,Type=Variant_Classification,Alteration,Location,`Additional Information`) %>%
-            mutate_all(~replace(.,grepl("^NA|NA$",.) | is.na(.),""))
+        list(
+            mafTbl=format_maf_table(maf),
+            mafTblFull=format_maf_table(mafFull)
+        )
 
     } else {
 
-        get_null_table("No mutations")
+        list(
+            mafTbl=get_null_table("No filtered mutations"),
+            mafTblFull=format_maf_table(mafFull)
+        )
 
     }
 

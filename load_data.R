@@ -15,7 +15,10 @@ load_data<-function(argos_dir,sampleID) {
 
     tbl01=get_clinical_table(argos_data,sampleID)
 
-    mafTbl=get_maf_table(argos_data,sampleID,isUnMatched)
+    res=get_maf_tables(argos_data,sampleID,isUnMatched)
+
+    mafTbl=res$mafTbl
+    mafTblFull=res$mafTblFull
 
     cnvTbl=get_cnv_table(argos_data,sampleID)
 
