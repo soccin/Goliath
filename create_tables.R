@@ -22,8 +22,7 @@ get_clinical_table <- function(argosDb,sid) {
         "Sample ID  ","COLLAB_ID","CMO ID  ","SAMPLE_ID",
         "Patient ID  ","PATIENT_ID","Sex  ","SEX",
         "Tumor Type  ","ONCOTREE_CODE","Sample Type  ","SAMPLE_TYPE",
-        "Pair Status  ","MATCHED","NormalID  ","NORMAL_ID",
-
+        "Pair Status  ","MATCHED","NormalID  ","NORMAL_ID"
 
     )
 
