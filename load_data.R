@@ -11,11 +11,20 @@ load_data<-function(argos_dir,sampleID) {
 
     argos_data=load_argos(argos_dir)
 
+    if(is.null(argos_data[[sampleID]])) {
+        cat("\n\nFATAL ERROR: invalid sample",sampleID,"\n")
+        cat("argos_dir =",argos_dir,"\n\n\n")
+        rlang::abort("FATAL ERROR")
+    }
+
     isUnMatched=argos_data[[sampleID]]$MATCH == "UnMatched"
 
     tbl01=get_clinical_table(argos_data,sampleID)
 
-    mafTbl=get_maf_table(argos_data,sampleID,isUnMatched)
+    res=get_maf_tables(argos_data,sampleID,isUnMatched)
+
+    mafTbl=res$mafTbl
+    mafTblFull=res$mafTblFull
 
     cnvTbl=get_cnv_table(argos_data,sampleID)
 
@@ -54,7 +63,7 @@ load_data<-function(argos_dir,sampleID) {
 
     reportTbl=tribble(
         ~key,~value,
-        "Report:","Argos Report (version 0.9.5)",
+        "Report:","Argos Report (version 0.9.6)",
         "Run Folder:", runFolder,
         "Data UUID:", digest::digest(argos_data[[sampleID]])
         )
@@ -64,6 +73,7 @@ load_data<-function(argos_dir,sampleID) {
         summaryTbl=summaryTbl,
         tbl01=tbl01,
         mafTbl=mafTbl,
+        mafTblFull=mafTblFull,
         cnvTbl=cnvTbl,
         cnvTblFull=cnvTblFull,
         fusionTbl=fusionTbl,

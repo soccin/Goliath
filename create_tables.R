@@ -15,7 +15,17 @@ get_null_table <- function(msg) {
 
 get_clinical_table <- function(argosDb,sid) {
 
-    clinTbl=read_csv("data/section01.csv")
+    clinTbl=tribble(
+
+        ~Key1,~Value1,~Key2,~Value2,
+        "Project ID  ","REQUEST_ID","StudyID  ","PROJECT_PI",
+        "Sample ID  ","COLLAB_ID","CMO ID  ","SAMPLE_ID",
+        "Patient ID  ","PATIENT_ID","Sex  ","SEX",
+        "Tumor Type  ","ONCOTREE_CODE","Sample Type  ","SAMPLE_TYPE",
+        "Pair Status  ","MATCHED","NormalID  ","NORMAL_ID"
+
+    )
+
     clinTbl$Value1=argosDb[[sid]][clinTbl$Value1] %>% unlist
     clinTbl$Value2=argosDb[[sid]][clinTbl$Value2] %>% unlist
     clinTbl$Value2['SAMPLE_ID']=gsub("s_","",clinTbl$Value2['SAMPLE_ID']) %>% gsub("_","-",.)
@@ -24,33 +34,55 @@ get_clinical_table <- function(argosDb,sid) {
 
 }
 
-get_maf_table <- function(argosDb,sid,unmatched) {
+format_maf_table <- function(mm) {
+
+    mm %>%
+        mutate(`Additional Information`=paste0("MAF: ",round(100*t_var_freq,1),"%")) %>%
+        mutate(Alteration=gsub("^p.","",HGVSp_Short)) %>%
+        mutate(Alteration=paste0(Alteration," (",HGVSc,")")) %>%
+        mutate(Alteration=ifelse(grepl("^NA \\(",Alteration),paste0(Chromosome,":",Start_Position," (",Reference_Allele,">",Tumor_Seq_Allele2,")"),Alteration)) %>%
+        mutate(Alteration=ifelse(nchar(Alteration)>25,gsub(" .*$","",Alteration),Alteration)) %>%
+        mutate(Location=paste("exon",gsub("/.*","",EXON))) %>%
+        select(Gene=Hugo_Symbol,Type=Variant_Classification,Alteration,Location,`Additional Information`) %>%
+        mutate_all(~replace(.,grepl("^NA|NA$",.) | is.na(.),""))
+}
+
+get_maf_tables <- function(argosDb,sid,unmatched) {
+
+    nullResult=list(
+                mafTbl=get_null_table("No filtered mutations"),
+                mafTblFull=get_null_table("No mutations (unfiltered)")
+                )
 
     if(is.null(argosDb[[sid]]$MAF)) {
-        return(get_null_table("No mutations"))
+        return(nullResult)
+    }
+
+    mafFull=argosDb[[sid]]$MAF %>% filter(!grepl("=$",HGVSp_Short))
+
+    if(nrow(mafFull)==0){
+        return(nullResult)
     }
 
     if(!unmatched) {
-        maf=argosDb[[sid]]$MAF
+        maf=mafFull
     } else {
-        maf=filter_exac(argosDb[[sid]]$MAF)
+        maf=filter_exac(mafFull)
     }
 
     if(!is.null(maf)) {
 
-        maf %>%
-            filter(!grepl("=$",HGVSp_Short)) %>%
-            mutate(`Additional Information`=paste0("MAF: ",round(100*t_var_freq,1),"%")) %>%
-            mutate(Alteration=gsub("^p.","",HGVSp_Short)) %>%
-            mutate(Alteration=paste0(Alteration," (",HGVSc,")")) %>%
-            mutate(Alteration=ifelse(nchar(Alteration)>25,gsub(" .*","",Alteration),Alteration)) %>%
-            mutate(Location=paste("exon",gsub("/.*","",EXON))) %>%
-            select(Gene=Hugo_Symbol,Type=Variant_Classification,Alteration,Location,`Additional Information`) %>%
-            mutate_all(~replace(.,grepl("^NA|NA$",.) | is.na(.),""))
+        list(
+            mafTbl=format_maf_table(maf),
+            mafTblFull=format_maf_table(mafFull)
+        )
 
     } else {
 
-        get_null_table("No mutations")
+        list(
+            mafTbl=get_null_table("No filtered mutations"),
+            mafTblFull=format_maf_table(mafFull)
+        )
 
     }
 
