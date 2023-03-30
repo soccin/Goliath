@@ -23,6 +23,13 @@ data=load_data(argosDir,sampleID)
 - `fusionTbl` - Fusion Events
 - `reportTbl` - Report info (version, input directory)
 
+## Notes:
+
+The `rda` for the oncoKb annotations are located here:
+```
+/home/socci/Work/CI/Reports/Goliath/data/oncoAnnotations_v230330.rda
+```
+
 
 
 
