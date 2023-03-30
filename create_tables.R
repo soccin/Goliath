@@ -35,10 +35,12 @@ get_clinical_table <- function(argosDb,sid) {
 }
 
 format_maf_table <- function(mm) {
+
     mm %>%
         mutate(`Additional Information`=paste0("MAF: ",round(100*t_var_freq,1),"%")) %>%
         mutate(Alteration=gsub("^p.","",HGVSp_Short)) %>%
         mutate(Alteration=paste0(Alteration," (",HGVSc,")")) %>%
+        mutate(Alteration=ifelse(grepl("^NA \\(",Alteration),paste0(Chromosome,":",Start_Position," (",Reference_Allele,">",Tumor_Seq_Allele2,")"),Alteration)) %>%
         mutate(Alteration=ifelse(nchar(Alteration)>25,gsub(" .*$","",Alteration),Alteration)) %>%
         mutate(Location=paste("exon",gsub("/.*","",EXON))) %>%
         select(Gene=Hugo_Symbol,Type=Variant_Classification,Alteration,Location,`Additional Information`) %>%
