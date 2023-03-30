@@ -43,6 +43,7 @@ get_maf_table <- function(argosDb,sid,unmatched) {
             mutate(`Additional Information`=paste0("MAF: ",round(100*t_var_freq,1),"%")) %>%
             mutate(Alteration=gsub("^p.","",HGVSp_Short)) %>%
             mutate(Alteration=paste0(Alteration," (",HGVSc,")")) %>%
+            mutate(Alteration=ifelse(nchar(Alteration)>25,gsub(" .*","",Alteration),Alteration)) %>%
             mutate(Location=paste("exon",gsub("/.*","",EXON))) %>%
             select(Gene=Hugo_Symbol,Type=Variant_Classification,Alteration,Location,`Additional Information`) %>%
             mutate_all(~replace(.,grepl("^NA|NA$",.) | is.na(.),""))
