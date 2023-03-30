@@ -77,7 +77,9 @@ load_data<-function(argos_dir,sampleID) {
         cnvTbl=cnvTbl,
         cnvTblFull=cnvTblFull,
         fusionTbl=fusionTbl,
-        reportTbl=reportTbl
+        reportTbl=reportTbl,
+        methods="This is the text for the methods section",
+        glossaryTbl=tribble(~Term,~Definition,"◉ (term1)","Definition for Term1, let us see if you can see this symbol [◉]")
     )
 
 }
