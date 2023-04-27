@@ -1,0 +1,82 @@
+---
+title: "Report01"
+output:
+    prettydoc::html_pretty:
+        theme: architect
+        mathjax: null
+        css: "style.css"
+keep_md: true
+self_contained: true
+---
+
+
+```{r loadData, echo=FALSE, include=FALSE}
+source("load_data.R", local=knitr::knit_global())
+data=load_data(params$argosDir,params$sampleID)
+```
+
+## Data Clinical
+```{r echo=F}
+css.cell=c(
+    "padding-left: .25em",
+    "padding-left: 1em; padding-right: 6em;",
+    "padding-left: .25em;",
+    "padding-left: 1em;")
+data$tbl01 %>%
+    addHtmlTableStyle(align = "llll",col.rgroup=c("#FBEEC7","#FFFFFF"),css.cell=css.cell) %>%
+     htmlTable(rnames=F,cnames=F,header=rep("",4))
+```
+
+## Summary
+```{r echo=F}
+data$summaryTbl %>% addHtmlTableStyle(align="ll",col.rgroup=c("#FFFFFF","#EBEBEB")) %>% htmlTable(rnames=F,cnames=F,header=rep("",2))
+```
+
+## Somatic alterations:
+
+### Mutations
+```{r echo=F}
+data$mafTbl %>%
+    addHtmlTableStyle(align="lllll",col.rgroup=c("#DBDEFF","#FFFFFF"),css.cell="padding-left: 1em;") %>%
+    htmlTable(rnames=F)
+```
+
+### Copy Number - HC Events
+```{r echo=F}
+data$cnvTbl %>%
+    addHtmlTableStyle(align="lllll",col.rgroup=c("#DEFFDB","#FFFFFF"),css.cell="padding-left: 1em;") %>%
+    htmlTable(rnames=F)
+```
+
+### Fusions
+```{r echo=F}
+data$fusionTbl %>%
+    addHtmlTableStyle(align="lllll",col.rgroup=c("#DEFFDB","#FFFFFF"),css.cell="padding-left: 1em;") %>%
+    htmlTable(rnames=F)
+```
+
+## Glossary
+```{r echo=F}
+data$glossaryTbl %>% addHtmlTableStyle(align="ll",col.rgroup=c("#FFFFFF","#EBEBEB")) %>% htmlTable(rnames=F,cnames=F,header=rep("",2))
+```
+
+## Methods
+```{r echo=F}
+data$methods %>% addHtmlTableStyle(align="l") %>% htmlTable(rnames=F,cnames=F,header=rep("",1))
+```
+
+
+## Mutations - All Events
+```{r echo=F}
+data$mafTblFull
+```
+
+## Copy Number - All Events
+```{r echo=F}
+data$cnvTblFull
+```
+
+## Report Info
+```{r echo=F}
+data$reportTbl %>% addHtmlTableStyle(align="ll",col.rgroup=c("#FFFFFF","#EBEBEB")) %>% htmlTable(rnames=F,cnames=F,header=rep("",2))
+```
