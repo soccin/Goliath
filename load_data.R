@@ -62,9 +62,11 @@ load_data<-function(argos_dir,sampleID) {
 
     runFolder=gsub(".*argos","",argos_dir) %>% gsub("/$","",.)
 
+    VERSION="0.9.7"
+
     reportTbl=tribble(
         ~key,~value,
-        "Report:","Argos Report (version 0.9.6)",
+        "Report:",sprintf("Argos Report (version %s)",VERSION),
         "Run Folder:", runFolder,
         "Data UUID:", digest::digest(argos_data[[sampleID]])
         )
