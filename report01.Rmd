@@ -57,7 +57,9 @@ data$fusionTbl %>%
 
 ## Glossary
 ```{r echo=F}
-data$glossaryTbl %>% addHtmlTableStyle(align="ll",col.rgroup=c("#FFFFFF","#EBEBEB")) %>% htmlTable(rnames=F,cnames=F,header=rep("",2))
+data$glossaryTbl %>%
+    addHtmlTableStyle(align="ll",col.rgroup=c("#FFFFFF","#EBEBEB"),css.cell="padding-left: 1em;") %>%
+    htmlTable(rnames=F,cnames=T)
 ```
 
 ## Methods
