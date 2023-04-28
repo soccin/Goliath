@@ -62,7 +62,7 @@ load_data<-function(argos_dir,sampleID) {
 
     runFolder=gsub(".*argos","",argos_dir) %>% gsub("/$","",.)
 
-    VERSION="0.9.7"
+    VERSION="0.9.8"
 
     reportTbl=tribble(
         ~key,~value,
