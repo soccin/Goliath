@@ -53,7 +53,10 @@ format_maf_table <- function(mm) {
         mutate(ONCOKB.FLAG=ifelse(ONCOGENIC %in% oncoGenicLevels,oncoGenic,"")) %>%
         mutate(LEVEL.FLAG=oncoKbLevels[HIGHEST_LEVEL]) %>%
         mutate(LEVEL.FLAG=ifelse(is.na(LEVEL.FLAG),"&nbsp;&nbsp;&nbsp;&nbsp;",LEVEL.FLAG)) %>%
-        mutate(`Additional Information`=paste0("MAF: ",round(100*t_var_freq,1),"%"," ",LEVEL.FLAG," ",ONCOKB.FLAG)) %>%
+        mutate(`Additional Information`=paste0(
+            gsub(" ","&nbsp;",sprintf("MAF: %5.1f",100*t_var_freq)),
+            "%"," ",
+            LEVEL.FLAG," ",ONCOKB.FLAG)) %>%
         mutate(Alteration=gsub("^p.","",HGVSp_Short)) %>%
         mutate(Alteration=paste0(Alteration," (",HGVSc,")")) %>%
         mutate(Alteration=ifelse(grepl("^NA \\(",Alteration),paste0(Chromosome,":",Start_Position," (",Reference_Allele,">",Tumor_Seq_Allele2,")"),Alteration)) %>%
