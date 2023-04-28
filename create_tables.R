@@ -93,8 +93,6 @@ get_maf_tables <- function(argosDb,sid,unmatched) {
     maf=maf %>% left_join(oncoKb$dat,by=oncoKbKey)
     mafFull=mafFull %>% left_join(oncoKb$dat,by=oncoKbKey)
 
-    browser()
-
     if(!is.null(maf)) {
 
         list(
