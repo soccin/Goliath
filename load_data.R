@@ -1,4 +1,5 @@
 source("load_argos.R")
+source("utils.R")
 require(glue)
 
 #################################################################
@@ -68,7 +69,6 @@ load_data<-function(argos_dir,sampleID) {
         "Data UUID:", digest::digest(argos_data[[sampleID]])
         )
 
-
     list(
         summaryTbl=summaryTbl,
         tbl01=tbl01,
@@ -78,8 +78,8 @@ load_data<-function(argos_dir,sampleID) {
         cnvTblFull=cnvTblFull,
         fusionTbl=fusionTbl,
         reportTbl=reportTbl,
-        methods="This is the text for the methods section",
-        glossaryTbl=tribble(~Term,~Definition,"◉ (term1)","Definition for Term1, let us see if you can see this symbol [◉]")
+        methods=load_methods(),
+        glossaryTbl=load_glossary()
     )
 
 }
