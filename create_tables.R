@@ -18,11 +18,11 @@ get_clinical_table <- function(argosDb,sid) {
     clinTbl=tribble(
 
         ~Key1,~Value1,~Key2,~Value2,
-        "Project ID  ","REQUEST_ID","StudyID  ","PROJECT_PI",
+        "Project ID  ","REQUEST_ID","Study ID  ","PROJECT_PI",
         "Sample ID  ","COLLAB_ID","CMO ID  ","SAMPLE_ID",
         "Patient ID  ","PATIENT_ID","Sex  ","SEX",
         "Tumor Type  ","ONCOTREE_CODE","Sample Type  ","SAMPLE_TYPE",
-        "Pair Status  ","MATCHED","NormalID  ","NORMAL_ID"
+        "Pair Status  ","MATCHED","Normal ID  ","NORMAL_ID"
 
     )
 
