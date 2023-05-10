@@ -42,12 +42,12 @@ load_data<-function(argos_dir,sampleID) {
     if(!isUnMatched) {
 
         msiTxt=glue("MSI Status = {MSI_STATUS}, score = {MSI_SCORE}",.envir=argos_data[[sampleID]])
-        tmbTxt=glue("The estimated tumor mutation burden (TMB) for this sample is {CMO_TMB_SCORE} mutations per megabase (mt/Mb).",.envir=argos_data[[sampleID]])
+        tmbTxt=glue("The estimated tumor mutational burden (TMB) for this sample is {CMO_TMB_SCORE} mutations per megabase (mt/Mb).",.envir=argos_data[[sampleID]])
         summaryTbl=tribble(
             ~Section, ~Data,
             "Summary:", summaryTxt,
             "MSI Status:", msiTxt,
-            "Tumor Mutations Burden:", tmbTxt
+            "Tumor Mutational Burden:", tmbTxt
         )
 
     } else {
