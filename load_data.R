@@ -58,7 +58,7 @@ load_data<-function(argos_dir,sampleID) {
             ~Section, ~Data,
             "Summary:", summaryTxt,
             "MSI Status:", msiTxt,
-            "Tumor Mutations Burden:", tmbTxt
+            "Tumor Mutational Burden:", tmbTxt
         )
 
     } else {

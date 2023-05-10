@@ -41,7 +41,7 @@ load_argos<-function(odir) {
 
     dpt=read_tsv(file.path(pdir,"data_clinical_patient.txt"),comment="#")
 
-    maf=read_tsv(fs::dir_ls(adir,regex=".muts.maf$"),comment="#")
+    maf=read_tsv(fs::dir_ls(adir,regex=".muts.maf$"),comment="#",col_types = cols(.default = "?", Chromosome = "character"))
 
     pairingTable=maf %>%
         distinct(SAMPLE_ID=Tumor_Sample_Barcode,NORMAL_ID=Matched_Norm_Sample_Barcode) %>%
