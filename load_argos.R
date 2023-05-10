@@ -43,6 +43,14 @@ load_argos<-function(odir) {
 
     maf=read_tsv(fs::dir_ls(adir,regex=".muts.maf$"),comment="#",col_types = cols(.default = "?", Chromosome = "character"))
 
+    if(!"t_var_freq" %in% names(maf)) {
+	    if("t_depth" %in% names(maf)) {
+            maf$t_var_freq=maf$t_alt_count/maf$t_depth
+        } else {
+            maf$t_var_freq=maf$t_alt_count/(maf$t_alt_count+maf$t_ref_count)
+        }
+    }
+    
     pairingTable=maf %>%
         distinct(SAMPLE_ID=Tumor_Sample_Barcode,NORMAL_ID=Matched_Norm_Sample_Barcode) %>%
         mutate(NORMAL_ID=gsub("_","-",NORMAL_ID) %>% gsub("^s-","",.))
