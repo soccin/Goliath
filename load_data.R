@@ -41,8 +41,19 @@ load_data<-function(argos_dir,sampleID) {
 
     if(!isUnMatched) {
 
-        msiTxt=glue("MSI Status = {MSI_STATUS}, score = {MSI_SCORE}",.envir=argos_data[[sampleID]])
-        tmbTxt=glue("The estimated tumor mutation burden (TMB) for this sample is {CMO_TMB_SCORE} mutations per megabase (mt/Mb).",.envir=argos_data[[sampleID]])
+        if(! is.null(argos_data[[sampleID]]$MSI_STATUS)){
+            msiTxt=glue("MSI Status = {MSI_STATUS}, score = {MSI_SCORE}",.envir=argos_data[[sampleID]])
+        }
+        else{
+            msiTxt="Unkown, not calculated"
+        }
+
+        if(! is.null(argos_data[[sampleID]]$CMO_TMB_SCORE)){
+            tmbTxt=glue("The estimated tumor mutation burden (TMB) for this sample is {CMO_TMB_SCORE} mutations per megabase (mt/Mb).",.envir=argos_data[[sampleID]])
+        }
+        else{
+            tmbTxt="Unkown, not calculated"
+        }
         summaryTbl=tribble(
             ~Section, ~Data,
             "Summary:", summaryTxt,
