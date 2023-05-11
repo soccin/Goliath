@@ -4,4 +4,4 @@ For copy number the *HC Events* table is filtered to only include highly changes
 
 For complete details on the ARGOS pipeline please see: [methods](https://github.com/mskcc/roslin-variant/wiki/Roslin-Methods-v2.5)
 
-For questions or to report a bug please contact <zzPDL_CMO_Pipeline_Support@mskcc.org>
+For questions or to report a bug please contact [zzPDL_CMO_Pipeline_Support@mskcc.org](mailto:zzPDL_CMO_Pipeline_Support@mskcc.org)
