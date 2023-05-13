@@ -1,5 +1,6 @@
 source("load_argos.R")
 source("utils.R")
+source("version.R")
 require(glue)
 
 #################################################################
@@ -72,8 +73,6 @@ load_data<-function(argos_dir,sampleID) {
     }
 
     runFolder=gsub(".*argos","",argos_dir) %>% gsub("/$","",.)
-
-    VERSION="0.9.8"
 
     reportTbl=tribble(
         ~key,~value,
