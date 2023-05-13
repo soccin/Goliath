@@ -34,10 +34,17 @@ get_sample_list<-function(odir) {
 
 }
 
-load_argos<-function(odir) {
+load_argos<-function(inputs) {
 
-    pdir=file.path(odir,"portal")
-    adir=file.path(odir,"analysis")
+    #
+    # inputs must be a list (or any object)
+    # with two properties
+    # - portal_dir => Path to argos/helix portal directory
+    # - analysis_dir => Path to argos/helix analysis directory
+    #
+    
+    pdir=inputs$portal_dir
+    adir=inputs$analysis_dir
 
     dpt=read_tsv(file.path(pdir,"data_clinical_patient.txt"),comment="#")
 

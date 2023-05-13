@@ -9,30 +9,35 @@ number_of_events <- function(table) {
     table %>% filter(Gene!="") %>% nrow
 }
 
-load_data<-function(argos_dir,sampleID) {
+load_data<-function(sample_id,inputs) {
 
-    argos_data=load_argos(argos_dir)
+    str(sample_id)
+    str(inputs)
 
-    if(is.null(argos_data[[sampleID]])) {
-        cat("\n\nFATAL ERROR: invalid sample",sampleID,"\n")
+    argos_data=load_argos(inputs)
+
+    argos_dir=dirname(inputs$analysis_dir)
+
+    if(is.null(argos_data[[sample_id]])) {
+        cat("\n\nFATAL ERROR: invalid sample",sample_id,"\n")
         cat("argos_dir =",argos_dir,"\n\n\n")
         rlang::abort("FATAL ERROR")
     }
 
-    isUnMatched=argos_data[[sampleID]]$MATCH == "UnMatched"
+    isUnMatched=argos_data[[sample_id]]$MATCH == "UnMatched"
 
-    tbl01=get_clinical_table(argos_data,sampleID)
+    tbl01=get_clinical_table(argos_data,sample_id)
 
-    res=get_maf_tables(argos_data,sampleID,isUnMatched)
+    res=get_maf_tables(argos_data,sample_id,isUnMatched)
 
     mafTbl=res$mafTbl
     mafTblFull=res$mafTblFull
 
-    cnvTbl=get_cnv_table(argos_data,sampleID)
+    cnvTbl=get_cnv_table(argos_data,sample_id)
 
-    cnvTblFull=get_cnv_table_full(argos_data,sampleID)
+    cnvTblFull=get_cnv_table_full(argos_data,sample_id)
 
-    fusionTbl=get_fusion_table(argos_data,sampleID)
+    fusionTbl=get_fusion_table(argos_data,sample_id)
 
     nMut=number_of_events(mafTbl)
     nCNV=number_of_events(cnvTblFull)
@@ -42,15 +47,15 @@ load_data<-function(argos_dir,sampleID) {
 
     if(!isUnMatched) {
 
-        if(! is.null(argos_data[[sampleID]]$MSI_STATUS)){
-            msiTxt=glue("MSI Status = {MSI_STATUS}, score = {MSI_SCORE}",.envir=argos_data[[sampleID]])
+        if(! is.null(argos_data[[sample_id]]$MSI_STATUS)){
+            msiTxt=glue("MSI Status = {MSI_STATUS}, score = {MSI_SCORE}",.envir=argos_data[[sample_id]])
         }
         else{
             msiTxt="Unkown, not calculated"
         }
 
-        if(! is.null(argos_data[[sampleID]]$CMO_TMB_SCORE)){
-            tmbTxt=glue("The estimated tumor mutation burden (TMB) for this sample is {CMO_TMB_SCORE} mutations per megabase (mt/Mb).",.envir=argos_data[[sampleID]])
+        if(! is.null(argos_data[[sample_id]]$CMO_TMB_SCORE)){
+            tmbTxt=glue("The estimated tumor mutation burden (TMB) for this sample is {CMO_TMB_SCORE} mutations per megabase (mt/Mb).",.envir=argos_data[[sample_id]])
         }
         else{
             tmbTxt="Unkown, not calculated"
@@ -78,7 +83,7 @@ load_data<-function(argos_dir,sampleID) {
         ~key,~value,
         "Report:",sprintf("Argos Report (version %s)",VERSION),
         "Run Folder:", runFolder,
-        "Data UUID:", digest::digest(argos_data[[sampleID]])
+        "Data UUID:", digest::digest(argos_data[[sample_id]])
         )
 
     list(
