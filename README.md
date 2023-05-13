@@ -1,6 +1,6 @@
 # Argos-Report
 
-## Version v1.0-RC1
+## Version v1.0.1 (BALTO)
 
 Scripts to load data from Argos output folders and process into tables to facilitate the creation of RMarkdown reports.
 
