@@ -9,10 +9,9 @@ keep_md: true
 self_contained: true
 ---
 
-
 ```{r loadData, echo=FALSE, include=FALSE}
 source("load_data.R", local=knitr::knit_global())
-data=load_data(params$argosDir,params$sampleID)
+data=load_data(params$sample_id,params$inputs)
 ```
 
 ## Data Clinical

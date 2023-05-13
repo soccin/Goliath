@@ -1,6 +1,6 @@
 # Argos-Report
 
-## Version 0.9.7
+## Version v1.0.1 (BALTO)
 
 Scripts to load data from Argos output folders and process into tables to facilitate the creation of RMarkdown reports.
 
@@ -10,27 +10,29 @@ In your `R` or `RMarkdown` source the `load_data.R` file and call the `load_data
 
 ```
 source("load_data.R")
-data=load_data(argosDir,sampleID)
+data=load_data(sample_id,inputs)
 ```
 
-`argosDir` is the path to an Argos output folder and `sampleID` is one of the samples from that run. The return values is a list with the following elements:
+## Inputs 
+
+- `sample_id` is one of the samples from that run. No checking is done so a fatal error will occur if the `sample_id` is not in the following `inputs` folders. (_FIX THIS_)
+
+- `inputs` is a list with two (2) elements:
+    - analysis_dir = the path to the ARGOS/HELIX analysis directory. It is the folder that contains the `.muts.maf$` file.
+    - portal_dir = the path to the ARGOS/HELIX portal directory. It folder that contains the `data_clinical_sample.txt` file.
+
+## Outputs
+
+The return value is a list with the following elements:
 
 - `tbl01` - Sample metadata (id's, type, matched normal, ...)
 - `summaryTbl` - Summary of alterations
 - `mafTbl` - Mutation Table. Will be filtered with `ExAC`-filter if unmatched
+- `mafTblFull` - Unfiltered Mutation Table for case of unmatched normal (same as mafTbl for matched case)
 - `cnvTbl` - Filtered Copy Number Table, DMP convention of only HOMODEL & AMP
 - `cnvTblFull` - Full Copy Number Table
 - `fusionTbl` - Fusion Events
 - `reportTbl` - Report info (version, input directory)
-
-## Notes:
-
-The `rda` for the oncoKb annotations are located here:
-```
-/home/socci/Work/CI/Reports/Goliath/data/oncoAnnotations_v230330.rda
-```
-
-
-
-
+- `methods` - Methods paragraph
+- `glossaryTbl` - Glossary table with various definitions
 
