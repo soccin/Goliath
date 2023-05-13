@@ -1,1 +1,1 @@
-VERSION="v1.0-RC1"
+VERSION="v1.1-devs"
