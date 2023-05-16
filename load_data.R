@@ -43,7 +43,7 @@ load_data<-function(sample_id,inputs) {
     nCNV=number_of_events(cnvTblFull)
     nFusion=number_of_events(fusionTbl)
 
-    summaryTxt=glue("{nMut} mutations, {nCNV} copy number alterations, {nFusion} structural variant dectected")
+    summaryTxt=glue("{nMut} mutations, {nCNV} copy number alterations, {nFusion} structural variant detected")
 
     if(!isUnMatched) {
 
@@ -51,14 +51,14 @@ load_data<-function(sample_id,inputs) {
             msiTxt=glue("MSI Status = {MSI_STATUS}, score = {MSI_SCORE}",.envir=argos_data[[sample_id]])
         }
         else{
-            msiTxt="Unkown, not calculated"
+            msiTxt="Unknown, not calculated"
         }
 
         if(! is.null(argos_data[[sample_id]]$CMO_TMB_SCORE)){
             tmbTxt=glue("The estimated tumor mutation burden (TMB) for this sample is {CMO_TMB_SCORE} mutations per megabase (mt/Mb).",.envir=argos_data[[sample_id]])
         }
         else{
-            tmbTxt="Unkown, not calculated"
+            tmbTxt="Unknown, not calculated"
         }
         summaryTbl=tribble(
             ~Section, ~Data,
