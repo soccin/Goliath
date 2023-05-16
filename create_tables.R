@@ -35,15 +35,16 @@ get_clinical_table <- function(argosDb,sid) {
 }
 
 oncoKbLevels=c(
-    LEVEL_1="&nbsp;&nbsp;&nbsp;🟢1",
-    LEVEL_2="&nbsp;&nbsp;&nbsp;🔵2",
-    LEVEL_3A="&nbsp;&nbsp;&nbsp;🟣3A",
-    LEVEL_4="&nbsp;&nbsp;&nbsp;⚫️4",
-    LEVEL_R1= "&nbsp;&nbsp;&nbsp;🔴R1",
-    LEVEL_R2=" &nbsp;&nbsp;&nbsp;🔴R2"
+    LEVEL_1 ="<i class=\"oncokb icon level-1\" data-test=\"oncogenic-icon-image\"></i>",
+    LEVEL_2 ="<i class=\"oncokb icon level-2\" data-test=\"oncogenic-icon-image\"></i>",
+    LEVEL_3A="<i class=\"oncokb icon level-3A\" data-test=\"oncogenic-icon-image\"></i>",
+    LEVEL_4 ="<i class=\"oncokb icon level-4\" data-test=\"oncogenic-icon-image\"></i>",
+    LEVEL_R1="<i class=\"oncokb icon level-R1\" data-test=\"oncogenic-icon-image\"></i>",
+    LEVEL_R2="<i class=\"oncokb icon level-R2\" data-test=\"oncogenic-icon-image\"></i>"
 )
 
-oncoGenic='<font color="blue">&nbsp;&nbsp;🅞</font>'
+
+oncoGenic='&nbsp;<i class="oncokb icon likely-oncogenic" data-test="oncogenic-icon-image"></i>'
 
 oncoGenicLevels=c("Likely Oncogenic","Oncogenic")
 
@@ -54,9 +55,11 @@ format_maf_table <- function(mm) {
         mutate(LEVEL.FLAG=oncoKbLevels[HIGHEST_LEVEL]) %>%
         mutate(LEVEL.FLAG=ifelse(is.na(LEVEL.FLAG),"&nbsp;&nbsp;&nbsp;&nbsp;",LEVEL.FLAG)) %>%
         mutate(`Additional Information`=paste0(
+            "<span style=\"display: inline-flex;\">",
             gsub(" ","&nbsp;",sprintf("MAF: %5.1f",100*t_var_freq)),
             "%"," ",
-            LEVEL.FLAG," ",ONCOKB.FLAG)) %>%
+            ONCOKB.FLAG," ",LEVEL.FLAG),
+            "</span>") %>%
         mutate(Alteration=gsub("^p.","",HGVSp_Short)) %>%
         mutate(Alteration=paste0(Alteration," (",HGVSc,")")) %>%
         mutate(Alteration=ifelse(grepl("^NA \\(",Alteration),paste0(Chromosome,":",Start_Position," (",Reference_Allele,">",Tumor_Seq_Allele2,")"),Alteration)) %>%
