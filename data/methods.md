@@ -1,4 +1,6 @@
-For copy number the *HC Events* table is filtered to only include highly changes. Specifically these are changes in total copy number (TCN) that either 0 for deletions or greater than 5 for amplifications. A complete list of all copy number events is in the table below. It is hidden by default, click the triangle to open.
+For the copy number, the *HC Events* table is filtered to include only high-level changes. These are changes in total copy number (TCN) that register as either `0` for deletions, or greater than `5` for amplifications. A comprehensive list of all copy number events can be found in the table below. This table is collapsed by default; click on the triangle to expand it.
+
+In addition, if the sample did not have a matched normal and was processed against the pool, then a germline filter has been applied to the mutation table. The full list of unfiltered mutations is available below.
 
 <br>
 
