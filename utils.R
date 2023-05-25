@@ -1,7 +1,6 @@
 load_oncokb <- function() {
 
-    ARGOS_ANNOTATION_RESOURCES="/juno/work/ci/resources/genomic_resources/annotations/"
-    oo=readRDS(last(fs::dir_ls(file.path(ARGOS_ANNOTATION_RESOURCES,"oncokb"))))
+    oo=readRDS(inputs$oncokb_file)
 
     #
     # Need this for join, Our MAF's keep Position fields as numbers

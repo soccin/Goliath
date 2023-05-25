@@ -1,13 +1,12 @@
 Term,Definition
-<i class="oncokb icon likely-neutral" data-test="oncogenic-icon-image"></i> ,likely-neutral
-<i class="oncokb icon likely-oncogenic" data-test="oncogenic-icon-image"></i> ,"Oncogenic, or likely oncogenic alteration."
-<i class="oncokb icon level-1" data-test="oncogenic-icon-image"></i> , OncoKb level1 FDA-recognized biomarker predictive of response to an FDA-approved drug in this indication.
-<i class="oncokb icon level-2" data-test="oncogenic-icon-image"></i> , OncoKb level2 Standard care biomarker recommended by the NCCN or other expert panels predictive of response to an FDA-approved drug in this indication.
-<i class="oncokb icon level-3A" data-test="oncogenic-icon-image"></i> , OncoKb level3A Compelling biological evidence supports the biomarker as being predictive of response to a drug.
-<i class="oncokb icon level-3B" data-test="oncogenic-icon-image"></i> , OncoKb level3B
-<i class="oncokb icon level-4" data-test="oncogenic-icon-image"></i> , OncoKb level4 Compelling biological evidence supports the biomarker as being predictive of response to a drug.
-<i class="oncokb icon level-R1" data-test="oncogenic-icon-image"></i> , levelR1 Standard care biomarker predictive of resistance to an FDA-approved drug in this indication."
-<i class="oncokb icon level-R2" data-test="oncogenic-icon-image"></i> , levelR2 Compelling clinical evidence supports the biomarker as being predictive of resistance to a drug.
-<i class="oncokb icon level-R3" data-test="oncogenic-icon-image"></i> , levelR3
+<i class="oncokb icon likely-neutral" data-test="oncogenic-icon-image"></i> , Likely-neutral
+<i class="oncokb icon likely-oncogenic" data-test="oncogenic-icon-image"></i> , Oncogenic, or likely oncogenic alteration
+<i class="oncokb icon level-1" data-test="oncogenic-icon-image"></i> , OncoKb level1 FDA-recognized biomarker predictive of response to an FDA-approved drug in this indication
+<i class="oncokb icon level-2" data-test="oncogenic-icon-image"></i> , OncoKb level2 Standard care biomarker recommended by the NCCN or other expert panels predictive of response to an FDA-approved drug in this indication
+<i class="oncokb icon level-3A" data-test="oncogenic-icon-image"></i> , OncoKb level3A Compelling clinical evidence supports the biomarker as being predictive of response to a drug
+<i class="oncokb icon level-3B" data-test="oncogenic-icon-image"></i> , OncoKb level3B Standard care or investigational biomarker predictive of response to an FDA-approved or investigational drug 
+<i class="oncokb icon level-4" data-test="oncogenic-icon-image"></i> , OncoKb level4 Compelling biological evidence supports the biomarker as being predictive of response to a drug
+<i class="oncokb icon level-R1" data-test="oncogenic-icon-image"></i> , OncoKb levelR1 Standard care biomarker predictive of resistance to an FDA-approved drug in this indication
+<i class="oncokb icon level-R2" data-test="oncogenic-icon-image"></i> , OncoKb levelR2 Compelling clinical evidence supports the biomarker as being predictive of resistance to a drug
 MAF,"Mutation Allele Frequency (also called variant allele frequency)"
 TCN,"Total Copy Number from *FACETS* algorithm"
