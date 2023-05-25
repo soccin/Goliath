@@ -40,10 +40,12 @@ load_data<-function(sample_id,inputs) {
     fusionTbl=get_fusion_table(argos_data,sample_id)
 
     nMut=number_of_events(mafTbl)
-    nCNV=number_of_events(cnvTblFull)
+    nCNV=number_of_events(cnvTbl)
     nFusion=number_of_events(fusionTbl)
+    nMutFull=number_of_events(mafTblFull)
+    nCNVFull=number_of_events(cnvTblFull)
 
-    summaryTxt=glue("{nMut} mutations, {nCNV} copy number alterations, {nFusion} structural variant detected")
+    summaryTxt=glue("Number of mutations: {nMut}; high level copy number alterations: {nCNV}; structural variants: {nFusion}")
 
     if(!isUnMatched) {
 
