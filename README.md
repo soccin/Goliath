@@ -1,8 +1,6 @@
 # Argos-Report
 
-## Version v1.1-devs
-
-_This is the devs branch_
+## Version v1.0.3 (BALTO)
 
 Scripts to load data from Argos output folders and process into tables to facilitate the creation of RMarkdown reports.
 
@@ -11,17 +9,21 @@ Scripts to load data from Argos output folders and process into tables to facili
 In your `R` or `RMarkdown` source the `load_data.R` file and call the `load_data` function. Example:
 
 ```
+# params gets passed by `rmarkdown::render`
+#
 source("load_data.R")
-data=load_data(sample_id,inputs)
+inputs=params
+data=load_data(params$sample_id,params$inputs)
 ```
 
 ## Inputs 
 
 - `sample_id` is one of the samples from that run. No checking is done so a fatal error will occur if the `sample_id` is not in the following `inputs` folders. (_FIX THIS_)
 
-- `inputs` is a list with two (2) elements:
-    - analysis_dir = the path to the ARGOS/HELIX analysis directory. It is the folder that contains the `.muts.maf$` file.
-    - portal_dir = the path to the ARGOS/HELIX portal directory. It folder that contains the `data_clinical_sample.txt` file.
+- `inputs` is a list with two (3) elements:
+    - `analysis_dir` = the path to the ARGOS/HELIX analysis directory. It is the folder that contains the `.muts.maf$` file.
+    - `portal_dir` = the path to the ARGOS/HELIX portal directory. It folder that contains the `data_clinical_sample.txt` file.
+    - `oncokb_file` = path to the oncokb annotation file
 
 ## Outputs
 
