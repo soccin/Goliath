@@ -64,7 +64,7 @@ load_data<-function(sample_id,inputs) {
         }
         summaryTbl=tribble(
             ~Section, ~Data,
-            "Summary:", summaryTxt,
+          # "Summary:", summaryTxt, ## MSI temporarly turned off, until we make sure its accuracy
             "MSI Status:", msiTxt,
             "TMB Value:", tmbTxt
         )
