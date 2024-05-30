@@ -46,7 +46,7 @@ load_argos<-function(inputs) {
     pdir=inputs$portal_dir
     adir=inputs$analysis_dir
 
-    dpt=read_tsv(file.path(pdir,"data_clinical_patient.txt"),comment="#")
+    dpt=read_tsv(file.path(pdir,"data_clinical_patient.txt"),comment="#",col_types = cols(.default = "?", SEX = "character"),show_col_types = TRUE)
 
     maf=read_tsv(fs::dir_ls(adir,regex=".muts.maf$"),comment="#",col_types = cols(.default = "?", Chromosome = "character"))
 
