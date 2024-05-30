@@ -33,10 +33,6 @@ load_data<-function(sample_id,inputs) {
     mafTbl=res$mafTbl
     mafTblFull=res$mafTblFull
 
-    cnvTbl=get_cnv_table(argos_data,sample_id)
-
-    cnvTblFull=get_cnv_table_full(argos_data,sample_id)
-
     fusionTbl=get_fusion_table(argos_data,sample_id)
 
     nMut=number_of_events(mafTbl)
@@ -45,13 +41,17 @@ load_data<-function(sample_id,inputs) {
     nMutFull=number_of_events(mafTblFull)
     
 
-    summaryTxt=glue("Number of mutations: {nMut}; high level copy number alterations: {nCNV}; structural variants: {nFusion}")
+    
 
     if(!isUnMatched) {
         
+        cnvTbl=get_cnv_table(argos_data,sample_id)
+        cnvTblFull=get_cnv_table_full(argos_data,sample_id)
         nCNV=number_of_events(cnvTbl)
         nCNVFull=number_of_events(cnvTblFull)
 
+        summaryTxt=glue("Number of mutations: {nMut}; high level copy number alterations: {nCNV}; structural variants: {nFusion}")
+        
         if(! is.null(argos_data[[sample_id]]$MSI_STATUS)){
             msiTxt=glue("MSI Status = {MSI_STATUS}, score = {MSI_SCORE}",.envir=argos_data[[sample_id]])
         }
@@ -77,6 +77,8 @@ load_data<-function(sample_id,inputs) {
         source("create_tables.R")
         cnvTbl=get_null_table("The copy number for the tumor samples with unmatched pooled normals are unreliable and should be ignored.")
         cnvTblFull=get_null_table("The copy number for the tumor samples with unmatched pooled normals are unreliable and should be ignored.")
+        
+        summaryTxt=glue("Number of mutations: {nMut}; structural variants: {nFusion}")
         
         summaryTbl=tribble(
             ~Section, ~Data,
