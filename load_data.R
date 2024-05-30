@@ -36,6 +36,12 @@ load_data<-function(sample_id,inputs) {
     fusionTbl=get_fusion_table(argos_data,sample_id)
 
     nMut=number_of_events(mafTbl)
+    
+    if(nMut==0) {
+        cat("\n\nFATAL ERROR: zero mutation sample",sample_id,"\n")
+        cat("No mutation samples can not be identified as Matched or UnMatched, needs manual run\n\n\n")
+        rlang::abort("FATAL ERROR")
+    }
 
     nFusion=number_of_events(fusionTbl)
     nMutFull=number_of_events(mafTblFull)
