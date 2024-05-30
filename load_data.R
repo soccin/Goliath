@@ -40,14 +40,17 @@ load_data<-function(sample_id,inputs) {
     fusionTbl=get_fusion_table(argos_data,sample_id)
 
     nMut=number_of_events(mafTbl)
-    nCNV=number_of_events(cnvTbl)
+
     nFusion=number_of_events(fusionTbl)
     nMutFull=number_of_events(mafTblFull)
-    nCNVFull=number_of_events(cnvTblFull)
+    
 
     summaryTxt=glue("Number of mutations: {nMut}; high level copy number alterations: {nCNV}; structural variants: {nFusion}")
 
     if(!isUnMatched) {
+        
+        nCNV=number_of_events(cnvTbl)
+        nCNVFull=number_of_events(cnvTblFull)
 
         if(! is.null(argos_data[[sample_id]]$MSI_STATUS)){
             msiTxt=glue("MSI Status = {MSI_STATUS}, score = {MSI_SCORE}",.envir=argos_data[[sample_id]])
@@ -71,10 +74,14 @@ load_data<-function(sample_id,inputs) {
 
     } else {
 
+        source("create_tables.R")
+        cnvTbl=get_null_table("The copy number for the tumor samples with unmatched pooled normals are unreliable and should be ignored.")
+        cnvTblFull=get_null_table("The copy number for the tumor samples with unmatched pooled normals are unreliable and should be ignored.")
+        
         summaryTbl=tribble(
             ~Section, ~Data,
             "Summary:", summaryTxt,
-            "Comments:", "This sample was run un-matched (against a pooled normal) so the ExAC Germline Filter was applied"
+            "Comments:", "This sample was run un-matched (against a pooled normal) so the ExAC Germline Filter was applied and copy number alterations are not reported."
         )
 
     }
