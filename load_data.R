@@ -71,11 +71,20 @@ load_data<-function(sample_id,inputs) {
         else{
             tmbTxt="Unknown, not calculated"
         }
+
+        if(! is.null(argos_data[[sample_id]]$ASCN_PURITY)){
+            cnvPurityTxt=glue("The CNV purity value is {ASCN_PURITY}",.envir=argos_data[[sample_id]])
+        }
+        else{
+            cnvPurityTxt="Unknown, not calculated"
+        }
+
         summaryTbl=tribble(
             ~Section, ~Data,
            "Summary:", summaryTxt,
           #  "MSI Status:", msiTxt,## MSI temporarly turned off, until we make sure its accuracy
-            "TMB Value:", tmbTxt
+            "TMB Value:", tmbTxt,
+            "CNV Purity:", cnvPurityTxt
         )
 
     } else {
