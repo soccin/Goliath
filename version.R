@@ -1,1 +1,1 @@
-VERSION="v1.0.3 Balto"
+VERSION="v1.0.6"
