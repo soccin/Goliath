@@ -9,71 +9,62 @@ number_of_events <- function(table) {
     table %>% filter(Gene!="") %>% nrow
 }
 
-load_data<-function(sample_id,inputs) {
+load_data<-function(tumor_id,normal_id,inputs) {
 
-    str(sample_id)
+    str(tumor_id)
+    str(normal_id)
     str(inputs)
 
     argos_data=load_argos(inputs)
 
     argos_dir=dirname(inputs$analysis_dir)
 
-    if(is.null(argos_data[[sample_id]])) {
-        cat("\n\nFATAL ERROR: invalid sample",sample_id,"\n")
+    if(is.null(argos_data[[tumor_id]])) {
+        cat("\n\nFATAL ERROR: invalid sample",tumor_id,"\n")
         cat("argos_dir =",argos_dir,"\n\n\n")
         rlang::abort("FATAL ERROR: invalid sample")
     }
 
-    isUnMatched=argos_data[[sample_id]]$MATCH == "UnMatched"
+    isUnMatched=argos_data[[tumor_id]]$MATCH == "UnMatched"
+    
+    tbl01=get_clinical_table(argos_data,tumor_id)
 
-    tbl01=get_clinical_table(argos_data,sample_id)
-
-    res=get_maf_tables(argos_data,sample_id,isUnMatched)
+    res=get_maf_tables(argos_data,tumor_id,isUnMatched)
 
     mafTbl=res$mafTbl
     mafTblFull=res$mafTblFull
 
-    fusionTbl=get_fusion_table(argos_data,sample_id)
+    fusionTbl=get_fusion_table(argos_data,tumor_id)
 
     nMut=number_of_events(mafTbl)
-
-    if(nMut==0) {
-        cat("\n\nFATAL ERROR: zero mutation sample",sample_id,"\n")
-        cat("No mutation samples can not be identified as Matched or UnMatched, needs manual run\n\n\n")
-        rlang::abort("FATAL ERROR: zero mutation sample")
-    }
-
     nFusion=number_of_events(fusionTbl)
     nMutFull=number_of_events(mafTblFull)
 
-
-
-
     if(!isUnMatched) {
 
-        cnvTbl=get_cnv_table(argos_data,sample_id)
-        cnvTblFull=get_cnv_table_full(argos_data,sample_id)
+        cnvTbl=get_cnv_table(argos_data,tumor_id)
+        cnvTblFull=get_cnv_table_full(argos_data,tumor_id)
         nCNV=number_of_events(cnvTbl)
         nCNVFull=number_of_events(cnvTblFull)
 
         summaryTxt=glue("Number of mutations: {nMut}; high level copy number alterations: {nCNV}; structural variants: {nFusion}")
 
-        if(! is.null(argos_data[[sample_id]]$MSI_STATUS)){
-            msiTxt=glue("MSI Status = {MSI_STATUS}, score = {MSI_SCORE}",.envir=argos_data[[sample_id]])
+        if(! is.null(argos_data[[tumor_id]]$MSI_STATUS)){
+            msiTxt=glue("MSI Status = {MSI_STATUS}, score = {MSI_SCORE}",.envir=argos_data[[tumor_id]])
         }
         else{
             msiTxt="Unknown, not calculated"
         }
 
-        if(! is.null(argos_data[[sample_id]]$CMO_TMB_SCORE)){
-            tmbTxt=glue("The estimated tumor mutation burden (TMB) for this sample is {CMO_TMB_SCORE} mutations per megabase (mt/Mb).",.envir=argos_data[[sample_id]])
+        if(! is.null(argos_data[[tumor_id]]$CMO_TMB_SCORE)){
+            tmbTxt=glue("The estimated tumor mutation burden (TMB) for this sample is {CMO_TMB_SCORE} mutations per megabase (mt/Mb).",.envir=argos_data[[tumor_id]])
         }
         else{
             tmbTxt="Unknown, not calculated"
         }
 
-        if(! is.null(argos_data[[sample_id]]$ASCN_PURITY)){
-            cnvPurityTxt=glue("The CNV purity value is {ASCN_PURITY}",.envir=argos_data[[sample_id]])
+        if(! is.null(argos_data[[tumor_id]]$ASCN_PURITY)){
+            cnvPurityTxt=glue("The CNV purity value is {ASCN_PURITY}",.envir=argos_data[[tumor_id]])
         }
         else{
             cnvPurityTxt="Unknown, not calculated"
@@ -109,7 +100,7 @@ load_data<-function(sample_id,inputs) {
         ~key,~value,
         "Report:",sprintf("Argos Report (version %s)",VERSION),
         "Run Folder:", runFolder,
-        "Data UUID:", digest::digest(argos_data[[sample_id]])
+        "Data UUID:", digest::digest(argos_data[[tumor_id]])
         )
 
     list(

@@ -58,10 +58,18 @@ load_argos<-function(inputs) {
         }
     }
     
-    pairingTable=maf %>%
-        distinct(SAMPLE_ID=Tumor_Sample_Barcode,NORMAL_ID=Matched_Norm_Sample_Barcode) %>%
-        mutate(NORMAL_ID=gsub("_","-",NORMAL_ID) %>% gsub("^s-","",.))
-
+    normal_id=gsub("_","-",inputs$normal_id) %>% gsub("^s-","",.)
+    
+    # pairingTable= maf %>%
+    #     distinct(SAMPLE_ID=Tumor_Sample_Barcode,NORMAL_ID=Matched_Norm_Sample_Barcode) %>%
+    #     mutate(NORMAL_ID=gsub("_","-",NORMAL_ID) %>% gsub("^s-","",.))
+    #if the output has 0 mutations, above doesn't work
+    
+    pairingTable <- tribble(
+        ~SAMPLE_ID,~NORMAL_ID,
+        inputs$tumor_id, normal_id
+    )
+    
     maf=maf %>% group_split(Tumor_Sample_Barcode)
     names(maf)=map(maf,\(x){x$Tumor_Sample_Barcode[1]}) %>% unlist
 
@@ -70,7 +78,7 @@ load_argos<-function(inputs) {
 
     sampleTbl=left_join(sampleTbl,pairingTable) %>%
         rowwise %>%
-        mutate(MATCHED=ifelse(grepl(PATIENT_ID,NORMAL_ID),"Matched","UnMatched")) %>%
+        mutate(MATCHED=ifelse(grepl("POOLED",NORMAL_ID),"UnMatched","Matched")) %>%
         ungroup
 
     sampleData=tibble_to_named_list(sampleTbl,"SAMPLE_ID")
