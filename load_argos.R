@@ -42,13 +42,15 @@ load_argos<-function(inputs) {
     # - portal_dir => Path to argos/helix portal directory
     # - analysis_dir => Path to argos/helix analysis directory
     #
-    
+
     pdir=inputs$portal_dir
     adir=inputs$analysis_dir
 
     dpt=read_tsv(file.path(pdir,"data_clinical_patient.txt"),comment="#",col_types = cols(.default = "?", SEX = "character"),show_col_types = TRUE)
 
-    maf=read_tsv(fs::dir_ls(adir,regex=".muts.maf$"),comment="#",col_types = cols(.default = "?", Chromosome = "character"))
+    #making default=character breaks other things
+    maf=read_tsv(fs::dir_ls(adir,regex=".muts.maf$"),comment="#",col_types = cols(.default = "?", Chromosome = "character", Tumor_Seq_Allele2 = "character"))
+
 
     if(!"t_var_freq" %in% names(maf)) {
 	    if("t_depth" %in% names(maf)) {
@@ -57,19 +59,19 @@ load_argos<-function(inputs) {
             maf$t_var_freq=maf$t_alt_count/(maf$t_alt_count+maf$t_ref_count)
         }
     }
-    
+
     normal_id=gsub("_","-",inputs$normal_id) %>% gsub("^s-","",.)
-    
+
     # pairingTable= maf %>%
     #     distinct(SAMPLE_ID=Tumor_Sample_Barcode,NORMAL_ID=Matched_Norm_Sample_Barcode) %>%
     #     mutate(NORMAL_ID=gsub("_","-",NORMAL_ID) %>% gsub("^s-","",.))
     #if the output has 0 mutations, above doesn't work
-    
+
     pairingTable <- tribble(
         ~SAMPLE_ID,~NORMAL_ID,
         inputs$tumor_id, normal_id
     )
-    
+
     maf=maf %>% group_split(Tumor_Sample_Barcode)
     names(maf)=map(maf,\(x){x$Tumor_Sample_Barcode[1]}) %>% unlist
 
